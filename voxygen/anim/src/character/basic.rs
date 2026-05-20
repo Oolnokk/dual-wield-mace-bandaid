@@ -2499,6 +2499,17 @@ impl Animation for BasicAction {
                 next.control.orientation.rotate_x(move2 * -1.9);
                 next.control.orientation.rotate_z(move2 * 0.6);
             },
+            Some("common.abilities.hammer.vigorous_bash") => {
+                hammer_start(&mut next, s_a);
+
+                next.control.orientation.rotate_x(move1 * 2.2);
+                next.control.position += Vec3::new(-8.0, 0.0, 12.0) * move1;
+                twist_back(&mut next, move1, 0.7, 0.3, 0.1, 0.4);
+
+                twist_forward(&mut next, move2, 1.6, 0.6, 0.3, 1.1);
+                next.control.orientation.rotate_x(move2 * -3.0);
+                next.control.position += Vec3::new(4.0, 6.0, -14.0) * move2;
+            },
             Some("common.abilities.hammer.scornful_swipe") => {
                 hammer_start(&mut next, s_a);
                 let move1_pre = move1.min(0.5) * 2.0;
@@ -2528,6 +2539,17 @@ impl Animation for BasicAction {
                 next.control.orientation.rotate_z(move2 * -2.3);
                 next.control.position += Vec3::new(6.0, 0.0, 6.0) * move2;
             },
+            Some("common.abilities.hammer.iron_tempest") => {
+                hammer_start(&mut next, s_a);
+
+                twist_back(&mut next, move1, 1.6, 0.6, 0.3, 1.1);
+                next.control.orientation.rotate_x(move1 * 0.8);
+
+                next.torso.orientation.rotate_z(move2base * -2.0 * PI);
+                twist_forward(&mut next, move2, 3.0, 1.0, 0.7, 1.6);
+                next.control.orientation.rotate_z(move2 * -2.0);
+                next.control.position += Vec3::new(4.0, 0.0, 4.0) * move2;
+            },
             Some("common.abilities.hammer.dual_heavy_whorl") => {
                 dual_wield_start(&mut next);
 
@@ -2540,6 +2562,19 @@ impl Animation for BasicAction {
                 twist_forward(&mut next, move2, 3.4, 1.2, 0.8, 1.8);
                 next.control_l.orientation.rotate_z(move2 * -2.3);
                 next.control_r.orientation.rotate_z(move2 * -2.3);
+            },
+            Some("common.abilities.hammer.dual_iron_tempest") => {
+                dual_wield_start(&mut next);
+
+                twist_back(&mut next, move1, 1.6, 0.6, 0.3, 1.1);
+                next.control_l.orientation.rotate_y(move1 * -PI / 2.0);
+                next.control_r.orientation.rotate_y(move1 * -PI / 2.0);
+                next.control.position += Vec3::new(0.0, 0.0, 3.0) * move1;
+
+                next.torso.orientation.rotate_z(move2base * -2.0 * PI);
+                twist_forward(&mut next, move2, 3.0, 1.0, 0.7, 1.6);
+                next.control_l.orientation.rotate_z(move2 * -2.0);
+                next.control_r.orientation.rotate_z(move2 * -2.0);
             },
             Some("common.abilities.hammer.breach") => {
                 hammer_start(&mut next, s_a);
