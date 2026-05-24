@@ -2549,33 +2549,62 @@ impl Animation for BasicAction {
                 }
             },
             Some("common.abilities.hammer.vigorous_bash") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
 
-                next.control.orientation.rotate_x(move1 * 2.2);
-                next.control.position += Vec3::new(-8.0, 0.0, 12.0) * move1;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1 * 2.2);
+                    next.control_r.position += Vec3::new(-8.0, 0.0, 12.0) * move1;
+                } else {
+                    next.control.orientation.rotate_x(move1 * 2.2);
+                    next.control.position += Vec3::new(-8.0, 0.0, 12.0) * move1;
+                }
                 twist_back(&mut next, move1, 0.7, 0.3, 0.1, 0.4);
 
                 twist_forward(&mut next, move2, 1.6, 0.6, 0.3, 1.1);
-                next.control.orientation.rotate_x(move2 * -3.0);
-                next.control.position += Vec3::new(4.0, 6.0, -14.0) * move2;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move2 * -3.0);
+                    next.control_r.position += Vec3::new(4.0, 6.0, -14.0) * move2;
+                } else {
+                    next.control.orientation.rotate_x(move2 * -3.0);
+                    next.control.position += Vec3::new(4.0, 6.0, -14.0) * move2;
+                }
             },
             Some("common.abilities.hammer.scornful_swipe") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
                 let move1_pre = move1.min(0.5) * 2.0;
                 let move1_shake = ((move1.max(0.3) - 0.3) * 15.0).sin();
                 let move1_late = move1.powi(4);
 
-                next.control.orientation.rotate_x(move1_pre * 2.3);
-                next.control.position += Vec3::new(0.0, 2.0, 16.0) * move1_pre;
-                next.control.position += Vec3::new(0.0, 0.0, 4.0) * move1_shake;
-                next.control.orientation.rotate_y(move1_late * 1.6);
-                next.control.position += Vec3::new(-8.0, 0.0, -8.0) * move1_late;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1_pre * 2.3);
+                    next.control_r.position += Vec3::new(0.0, 2.0, 16.0) * move1_pre;
+                    next.control_r.position += Vec3::new(0.0, 0.0, 4.0) * move1_shake;
+                    next.control_r.orientation.rotate_y(move1_late * 1.6);
+                    next.control_r.position += Vec3::new(-8.0, 0.0, -8.0) * move1_late;
+                } else {
+                    next.control.orientation.rotate_x(move1_pre * 2.3);
+                    next.control.position += Vec3::new(0.0, 2.0, 16.0) * move1_pre;
+                    next.control.position += Vec3::new(0.0, 0.0, 4.0) * move1_shake;
+                    next.control.orientation.rotate_y(move1_late * 1.6);
+                    next.control.position += Vec3::new(-8.0, 0.0, -8.0) * move1_late;
+                }
                 twist_back(&mut next, move1_late, 1.0, 0.4, 0.2, 0.7);
-                next.control.orientation.rotate_z(move1_late * 1.2);
+                if is_dual {
+                    next.control_r.orientation.rotate_z(move1_late * 1.2);
+                } else {
+                    next.control.orientation.rotate_z(move1_late * 1.2);
+                }
 
                 twist_forward(&mut next, move2, 1.9, 0.9, 0.6, 1.1);
-                next.control.orientation.rotate_y(move2 * -1.7);
-                next.control.orientation.rotate_z(move2 * -2.7);
+                if is_dual {
+                    next.control_r.orientation.rotate_y(move2 * -1.7);
+                    next.control_r.orientation.rotate_z(move2 * -2.7);
+                } else {
+                    next.control.orientation.rotate_y(move2 * -1.7);
+                    next.control.orientation.rotate_z(move2 * -2.7);
+                }
             },
             Some("common.abilities.hammer.heavy_whorl") => {
                 hammer_start(&mut next, s_a);
@@ -2626,33 +2655,60 @@ impl Animation for BasicAction {
                 next.control_r.orientation.rotate_z(move2 * -2.0);
             },
             Some("common.abilities.hammer.breach") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
 
-                next.control.orientation.rotate_x(move1 * 2.5);
-                next.control.orientation.rotate_z(move1 * -4.8);
-                next.control.position += Vec3::new(-12.0, 0.0, 22.0) * move1;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1 * 2.5);
+                    next.control_r.orientation.rotate_z(move1 * -4.8);
+                    next.control_r.position += Vec3::new(-12.0, 0.0, 22.0) * move1;
+                } else {
+                    next.control.orientation.rotate_x(move1 * 2.5);
+                    next.control.orientation.rotate_z(move1 * -4.8);
+                    next.control.position += Vec3::new(-12.0, 0.0, 22.0) * move1;
+                }
                 twist_back(&mut next, move1, 0.6, 0.2, 0.0, 0.3);
 
                 twist_forward(&mut next, move2, 1.6, 0.4, 0.2, 0.7);
-                next.control.orientation.rotate_x(move2 * -4.5);
-                next.control.position += Vec3::new(0.0, 0.0, -20.0) * move2;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move2 * -4.5);
+                    next.control_r.position += Vec3::new(0.0, 0.0, -20.0) * move2;
+                } else {
+                    next.control.orientation.rotate_x(move2 * -4.5);
+                    next.control.position += Vec3::new(0.0, 0.0, -20.0) * move2;
+                }
             },
             Some("common.abilities.hammer.pile_driver") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
                 let shake = (move1base * 15.0).sin();
                 let move1 = (move1base * 2.0).min(1.0) * pullback;
 
                 twist_back(&mut next, move1, 0.9, 0.3, 0.1, 0.5);
-                next.control.orientation.rotate_x(move1 * 2.4);
-                next.control.position += Vec3::new(-14.0, 0.0, 14.0) * move1;
-                next.control.orientation.rotate_z(move1 * 1.8);
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1 * 2.4);
+                    next.control_r.position += Vec3::new(-14.0, 0.0, 14.0) * move1;
+                    next.control_r.orientation.rotate_z(move1 * 1.8);
 
-                next.control.orientation.rotate_x(shake * 0.15);
+                    next.control_r.orientation.rotate_x(shake * 0.15);
+                } else {
+                    next.control.orientation.rotate_x(move1 * 2.4);
+                    next.control.position += Vec3::new(-14.0, 0.0, 14.0) * move1;
+                    next.control.orientation.rotate_z(move1 * 1.8);
+
+                    next.control.orientation.rotate_x(shake * 0.15);
+                }
 
                 twist_forward(&mut next, move2, 1.6, 0.5, 0.2, 0.9);
-                next.control.orientation.rotate_x(move2 * -4.0);
-                next.control.orientation.rotate_z(move2 * 0.4);
-                next.control.position += Vec3::new(0.0, 0.0, -12.0) * move2;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move2 * -4.0);
+                    next.control_r.orientation.rotate_z(move2 * 0.4);
+                    next.control_r.position += Vec3::new(0.0, 0.0, -12.0) * move2;
+                } else {
+                    next.control.orientation.rotate_x(move2 * -4.0);
+                    next.control.orientation.rotate_z(move2 * 0.4);
+                    next.control.position += Vec3::new(0.0, 0.0, -12.0) * move2;
+                }
             },
             Some("common.abilities.hammer.upheaval") => {
                 hammer_start(&mut next, s_a);
@@ -2744,58 +2800,111 @@ impl Animation for BasicAction {
                 next.control.position += Vec3::new(0.0, 0.0, 20.0) * move2;
             },
             Some("common.abilities.hammer.spine_cracker") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
 
                 twist_back(&mut next, move1, 1.9, 1.5, 0.5, 1.2);
                 next.head.position += Vec3::new(-2.0, 2.0, 0.0) * move1;
-                next.control.orientation.rotate_x(move1 * 1.8);
-                next.control.position += Vec3::new(0.0, 0.0, 8.0) * move1;
-                next.control.orientation.rotate_y(move1 * 0.4);
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1 * 1.8);
+                    next.control_r.position += Vec3::new(0.0, 0.0, 8.0) * move1;
+                    next.control_r.orientation.rotate_y(move1 * 0.4);
+                } else {
+                    next.control.orientation.rotate_x(move1 * 1.8);
+                    next.control.position += Vec3::new(0.0, 0.0, 8.0) * move1;
+                    next.control.orientation.rotate_y(move1 * 0.4);
+                }
 
                 twist_forward(&mut next, move2, 2.1, 1.6, 0.4, 1.3);
-                next.control.orientation.rotate_z(move2 * 1.6);
-                next.control.position += Vec3::new(-16.0, 12.0, -8.0) * move2;
+                if is_dual {
+                    next.control_r.orientation.rotate_z(move2 * 1.6);
+                    next.control_r.position += Vec3::new(-16.0, 12.0, -8.0) * move2;
+                } else {
+                    next.control.orientation.rotate_z(move2 * 1.6);
+                    next.control.position += Vec3::new(-16.0, 12.0, -8.0) * move2;
+                }
             },
             Some("common.abilities.hammer.lung_pummel") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
 
                 twist_back(&mut next, move1, 1.9, 0.7, 0.3, 1.2);
-                next.control.orientation.rotate_x(move1 * 1.2);
-                next.control.orientation.rotate_z(move1 * 1.0);
-                next.control.position += Vec3::new(-12.0, 0.0, 0.0) * move1;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1 * 1.2);
+                    next.control_r.orientation.rotate_z(move1 * 1.0);
+                    next.control_r.position += Vec3::new(-12.0, 0.0, 0.0) * move1;
+                } else {
+                    next.control.orientation.rotate_x(move1 * 1.2);
+                    next.control.orientation.rotate_z(move1 * 1.0);
+                    next.control.position += Vec3::new(-12.0, 0.0, 0.0) * move1;
+                }
 
                 twist_forward(&mut next, move2, 3.4, 1.4, 0.9, 2.1);
-                next.control.orientation.rotate_z(move2 * -4.0);
-                next.control.position += Vec3::new(12.0, 0.0, 14.0) * move2;
+                if is_dual {
+                    next.control_r.orientation.rotate_z(move2 * -4.0);
+                    next.control_r.position += Vec3::new(12.0, 0.0, 14.0) * move2;
+                } else {
+                    next.control.orientation.rotate_z(move2 * -4.0);
+                    next.control.position += Vec3::new(12.0, 0.0, 14.0) * move2;
+                }
             },
             Some("common.abilities.hammer.helm_crusher") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
 
                 twist_back(&mut next, move1, 0.8, 0.3, 0.1, 0.5);
-                next.control.orientation.rotate_x(move1 * -0.8);
-                next.control.orientation.rotate_z(move1 * -1.6);
-                next.control.orientation.rotate_x(move1 * 2.8);
-                next.control.position += Vec3::new(-9.0, 0.0, 8.0) * move1;
-                next.control.orientation.rotate_z(move1 * -0.4);
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1 * -0.8);
+                    next.control_r.orientation.rotate_z(move1 * -1.6);
+                    next.control_r.orientation.rotate_x(move1 * 2.8);
+                    next.control_r.position += Vec3::new(-9.0, 0.0, 8.0) * move1;
+                    next.control_r.orientation.rotate_z(move1 * -0.4);
+                } else {
+                    next.control.orientation.rotate_x(move1 * -0.8);
+                    next.control.orientation.rotate_z(move1 * -1.6);
+                    next.control.orientation.rotate_x(move1 * 2.8);
+                    next.control.position += Vec3::new(-9.0, 0.0, 8.0) * move1;
+                    next.control.orientation.rotate_z(move1 * -0.4);
+                }
 
                 twist_forward(&mut next, move2, 1.8, 0.7, 0.4, 1.1);
-                next.control.orientation.rotate_x(move2 * -5.0);
-                next.control.orientation.rotate_z(move2 * -1.0);
-                next.control.position += Vec3::new(-12.0, 0.0, -8.0) * move2;
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move2 * -5.0);
+                    next.control_r.orientation.rotate_z(move2 * -1.0);
+                    next.control_r.position += Vec3::new(-12.0, 0.0, -8.0) * move2;
+                } else {
+                    next.control.orientation.rotate_x(move2 * -5.0);
+                    next.control.orientation.rotate_z(move2 * -1.0);
+                    next.control.position += Vec3::new(-12.0, 0.0, -8.0) * move2;
+                }
             },
             Some("common.abilities.hammer.thunderclap") => {
-                hammer_start(&mut next, s_a);
+                let is_dual = matches!(d.ability_info.and_then(|ai| ai.hand), Some(HandInfo::MainHand | HandInfo::OffHand));
+                if is_dual { dual_wield_start(&mut next); } else { hammer_start(&mut next, s_a); }
 
                 twist_back(&mut next, move1, 1.8, 0.9, 0.5, 1.1);
-                next.control.orientation.rotate_x(move1 * 2.4);
-                next.control.position += Vec3::new(-16.0, -8.0, 12.0) * move1;
-                next.control.orientation.rotate_z(move1 * PI / 2.0);
-                next.control.orientation.rotate_x(move1 * 0.6);
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move1 * 2.4);
+                    next.control_r.position += Vec3::new(-16.0, -8.0, 12.0) * move1;
+                    next.control_r.orientation.rotate_z(move1 * PI / 2.0);
+                    next.control_r.orientation.rotate_x(move1 * 0.6);
+                } else {
+                    next.control.orientation.rotate_x(move1 * 2.4);
+                    next.control.position += Vec3::new(-16.0, -8.0, 12.0) * move1;
+                    next.control.orientation.rotate_z(move1 * PI / 2.0);
+                    next.control.orientation.rotate_x(move1 * 0.6);
+                }
 
                 twist_forward(&mut next, move2, 2.4, 1.1, 0.6, 1.4);
-                next.control.orientation.rotate_x(move2 * -5.0);
-                next.control.position += Vec3::new(4.0, 12.0, -12.0) * move2;
-                next.control.orientation.rotate_z(move2 * 0.6);
+                if is_dual {
+                    next.control_r.orientation.rotate_x(move2 * -5.0);
+                    next.control_r.position += Vec3::new(4.0, 12.0, -12.0) * move2;
+                    next.control_r.orientation.rotate_z(move2 * 0.6);
+                } else {
+                    next.control.orientation.rotate_x(move2 * -5.0);
+                    next.control.position += Vec3::new(4.0, 12.0, -12.0) * move2;
+                    next.control.orientation.rotate_z(move2 * 0.6);
+                }
             },
             Some("common.abilities.hammer.earthshaker") => {
                 hammer_start(&mut next, s_a);
