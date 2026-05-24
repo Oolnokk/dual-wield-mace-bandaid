@@ -3702,24 +3702,35 @@ impl Animation for MultiAction {
                     // al=1 on even strikes (left active), ar=1 on odd strikes (right active)
                     let al = if action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
                     let ar = 1.0 - al;
-                    // dir: +1 winds/swings left, -1 winds/swings right (mirrors body twist)
-                    let dir = al - ar;
+                    // dir drives body rotation; uses d.current_action so assignments
+                    // always reflect the current strike and don't accumulate
+                    let dir = if d.current_action % 2 == 0 { 1.0_f32 } else { -1.0_f32 };
 
-                    dual_wield_start(&mut next);
+                    // Only call dual_wield_start once per frame so arm bone
+                    // rotations from each action accumulate correctly
+                    if action == 0 {
+                        dual_wield_start(&mut next);
+                    }
 
-                    // Buildup: active arm winds up like wide_wallop charge
+                    // Body: absolute assignments so past actions don't stack rotations
+                    next.chest.orientation =
+                        Quaternion::rotation_z(move1 * 1.2 * dir + move2 * -2.0 * dir);
+                    next.head.orientation =
+                        Quaternion::rotation_z(move1 * -0.5 * dir + move2 * 0.9 * dir);
+                    next.belt.orientation =
+                        Quaternion::rotation_z(move1 * -0.2 * dir + move2 * 0.4 * dir);
+                    next.shorts.orientation =
+                        Quaternion::rotation_z(move1 * -0.6 * dir + move2 * 1.8 * dir);
+
+                    // Active arm: wide_wallop-style wind-up and swing
                     next.control_l.orientation.rotate_x(move1 * 1.1 * al);
                     next.control_r.orientation.rotate_x(move1 * 1.1 * ar);
-                    twist_back(&mut next, move1 * dir, 1.7, 0.7, 0.3, 1.1);
                     next.control_l.orientation.rotate_y(move1 * -0.8 * al);
                     next.control_r.orientation.rotate_y(move1 * 0.8 * ar);
                     next.control_l.position += Vec3::new(0.0, 0.0, 6.0) * move1 * al;
                     next.control_r.position += Vec3::new(0.0, 0.0, 6.0) * move1 * ar;
-
-                    // Action: active arm swings through like wide_wallop swing
                     next.control_l.orientation.rotate_x(move2 * 0.6 * al);
                     next.control_r.orientation.rotate_x(move2 * 0.6 * ar);
-                    twist_forward(&mut next, move2 * dir, 4.8, 1.7, 0.7, 3.2);
                     next.control_l.orientation.rotate_y(move2 * 2.0 * al);
                     next.control_r.orientation.rotate_y(move2 * -2.0 * ar);
                     next.control_l.orientation.rotate_z(move2 * -1.8 * al);
