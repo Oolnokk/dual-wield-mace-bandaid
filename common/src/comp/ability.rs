@@ -899,6 +899,8 @@ pub enum CharacterAbility {
         #[serde(default)]
         auto_progress: bool,
         #[serde(default)]
+        loop_while_held: bool,
+        #[serde(default)]
         meta: AbilityMeta,
     },
     LeapExplosionShockwave {
@@ -1636,6 +1638,7 @@ impl CharacterAbility {
                 ref mut energy_cost_per_strike,
                 specifier: _,
                 auto_progress: _,
+                loop_while_held: _,
                 meta: _,
             } => {
                 *energy_cost_per_strike /= stats.energy_efficiency;
@@ -2675,6 +2678,7 @@ impl TryFrom<(&CharacterAbility, AbilityInfo, &JoinData<'_>)> for CharacterState
                 energy_cost_per_strike,
                 specifier,
                 auto_progress,
+                loop_while_held,
                 meta: _,
             } => CharacterState::ComboMelee2(combo_melee2::Data {
                 static_data: combo_melee2::StaticData {
@@ -2682,6 +2686,7 @@ impl TryFrom<(&CharacterAbility, AbilityInfo, &JoinData<'_>)> for CharacterState
                     energy_cost_per_strike: *energy_cost_per_strike,
                     specifier: *specifier,
                     auto_progress: *auto_progress,
+                    loop_while_held: *loop_while_held,
                     ability_info,
                 },
                 exhausted: false,
