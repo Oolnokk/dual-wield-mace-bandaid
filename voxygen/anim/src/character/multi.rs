@@ -94,6 +94,66 @@ impl Animation for MultiAction {
                 //               SWORD
                 // ==================================
                 Some(
+                    "common.abilities.sword.basic_dual_double_slash"
+                    | "common.abilities.sword.heavy_dual_double_slash"
+                    | "common.abilities.sword.agile_dual_double_slash"
+                    | "common.abilities.sword.defensive_dual_double_slash"
+                    | "common.abilities.sword.crippling_dual_double_slash"
+                    | "common.abilities.sword.cleaving_dual_double_slash",
+                ) => {
+                    let move1 = move1base.powf(0.25) * multi_action_pullback;
+                    let move2 = move2base.powi(2) * multi_action_pullback;
+                    let move2alt = move2base.powf(0.25) * multi_action_pullback;
+                    let dir = if d.current_action % 2 == 0 { 1.0_f32 } else { -1.0_f32 };
+
+                    if action == 0 {
+                        dual_wield_start(&mut next);
+                    }
+
+                    // Body: absolute assignments with dir for mirroring
+                    next.chest.orientation =
+                        Quaternion::rotation_y(move1 * 0.1 + move2alt * -0.15)
+                            * Quaternion::rotation_z(dir * (move1 * 1.2 + move2alt * -2.0));
+                    next.head.orientation =
+                        Quaternion::rotation_x(move1 * 0.2 + move2alt * -0.24)
+                            * Quaternion::rotation_y(dir * (move1 * 0.3 + move2alt * -0.36))
+                            * Quaternion::rotation_z(dir * (move1 * -0.3 + move2alt * 0.72));
+                    next.belt.orientation =
+                        Quaternion::rotation_z(dir * (move1 * -0.8 + move2alt * 1.0));
+                    next.shorts.orientation =
+                        Quaternion::rotation_z(dir * (move1 * -1.0 + move2alt * 1.6));
+
+                    if action == d.current_action {
+                        let active_pos = Vec3::new(
+                            dir * (s_a.sc.0 + move1 * -3.0 + move2 * 20.0),
+                            s_a.sc.1,
+                            s_a.sc.2 + move1 * 10.0 + move2alt * -10.0,
+                        );
+                        let active_ori =
+                            Quaternion::rotation_x(s_a.sc.3 + move2alt * -1.2)
+                                * Quaternion::rotation_y(dir * (move1 * -1.2 + move2 * 2.3))
+                                * Quaternion::rotation_z(dir * (move2alt * -1.5));
+                        let idle_pos =
+                            Vec3::new(-dir * s_a.sc.0 + dir * move1, s_a.sc.1 - 7.0, s_a.sc.2);
+                        let idle_ori = Quaternion::rotation_x(s_a.sc.3 - 1.0)
+                            * Quaternion::rotation_y(dir * (s_a.sc.4 + move1 * 0.5));
+
+                        if d.current_action % 2 == 0 {
+                            next.control_l.position = active_pos;
+                            next.control_l.orientation = active_ori;
+                            next.control_r.position = idle_pos;
+                            next.control_r.orientation = idle_ori;
+                        } else {
+                            next.control_r.position = active_pos;
+                            next.control_r.orientation = active_ori;
+                            next.control_l.position = idle_pos;
+                            next.control_l.orientation = idle_ori;
+                        }
+
+                        next.off_weapon_trail = false;
+                    }
+                },
+                Some(
                     "common.abilities.sword.basic_double_slash"
                     | "common.abilities.sword.heavy_double_slash"
                     | "common.abilities.sword.agile_double_slash"
@@ -3696,7 +3756,10 @@ impl Animation for MultiAction {
                     next.control.orientation.rotate_x(move2 * 0.6);
                     next.control.position += Vec3::new(-20.0, 8.0, 0.0) * move2;
                 },
-                Some("common.abilities.hammer.dual_solid_smash") => {
+                Some(
+                    "common.abilities.hammer.dual_solid_smash"
+                    | "common.abilities.axe.dual_triple_chop",
+                ) => {
                     let move1 = move1base.powf(0.25) * multi_action_pullback;
                     let move2 = move2base * multi_action_pullback;
                     let dir = if d.current_action % 2 == 0 { 1.0_f32 } else { -1.0_f32 };
