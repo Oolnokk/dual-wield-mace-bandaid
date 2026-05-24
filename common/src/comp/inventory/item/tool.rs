@@ -404,6 +404,8 @@ pub struct AbilityContext {
     pub stance: Option<Stance>,
     #[serde(default)]
     pub dual_wielding_same_kind: bool,
+    #[serde(default)]
+    pub dual_wielding: bool,
     pub combo: Option<u32>,
 }
 
@@ -428,11 +430,21 @@ impl AbilityContext {
         } else {
             false
         };
+        let dual_wielding = if let Some(inv) = inv {
+            let has_weapon = |slot| {
+                inv.equipped(slot)
+                    .is_some_and(|i| matches!(&*i.kind(), ItemKind::Tool(_)))
+            };
+            has_weapon(EquipSlot::ActiveMainhand) && has_weapon(EquipSlot::ActiveOffhand)
+        } else {
+            false
+        };
         let combo = combo.map(|c| c.counter());
 
         AbilityContext {
             stance,
             dual_wielding_same_kind,
+            dual_wielding,
             combo,
         }
     }
@@ -441,16 +453,20 @@ impl AbilityContext {
         let AbilityContext {
             stance,
             dual_wielding_same_kind,
+            dual_wielding,
             combo,
         } = self;
         // Either stance not required or context is in the same stance
         let stance_check = stance.is_none_or(|s| context.stance == Some(s));
-        // Either dual wield not required or context is dual wielding
-        let dual_wield_check = !dual_wielding_same_kind || context.dual_wielding_same_kind;
+        // Either dual wield not required or context is dual wielding same kind
+        let dual_wield_same_kind_check =
+            !dual_wielding_same_kind || context.dual_wielding_same_kind;
+        // Either dual wield not required or context is dual wielding (any weapon)
+        let dual_wield_check = !dual_wielding || context.dual_wielding;
         // Either no minimum combo needed or context has sufficient combo
         let combo_check = combo.is_none_or(|c| context.combo.is_some_and(|c_c| c_c >= c));
 
-        stance_check && dual_wield_check && combo_check
+        stance_check && dual_wield_same_kind_check && dual_wield_check && combo_check
     }
 }
 

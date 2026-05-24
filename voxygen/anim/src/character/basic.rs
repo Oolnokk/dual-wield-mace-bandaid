@@ -1986,15 +1986,14 @@ impl Animation for BasicAction {
 
                 if is_dual {
                     dual_wield_start(&mut next);
-                    next.control_r.position = Vec3::new(
-                        s_a.ac.0 + 0.5 + move1 * 7.0,
-                        s_a.ac.1 + 9.0 + move1 * -4.0,
-                        s_a.ac.2 + 2.5 + move1 * 18.0 + tension / 5.0,
+                    next.control_r.orientation
+                        .rotate_x(move1 * -1.5 + tension / 30.0);
+                    next.control_r.orientation.rotate_z(move1 * -0.3);
+                    next.control_r.position += Vec3::new(
+                        move1 * -2.0,
+                        move1 * -5.0,
+                        move1 * 15.0 + tension / 5.0,
                     );
-                    next.control_r.orientation =
-                        Quaternion::rotation_x(s_a.ac.3 - 2.25 + move1 * -1.0 + tension / 30.0)
-                            * Quaternion::rotation_y(s_a.ac.4)
-                            * Quaternion::rotation_z(s_a.ac.5 - 0.2 - move1 * PI);
                     next.control_r.orientation.rotate_x(move2 * -3.0);
                     next.control_r.position += Vec3::new(0.0, move2 * 8.0, move2 * -30.0);
                 } else {
