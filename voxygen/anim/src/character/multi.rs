@@ -3697,11 +3697,10 @@ impl Animation for MultiAction {
                     next.control.position += Vec3::new(-20.0, 8.0, 0.0) * move2;
                 },
                 Some("common.abilities.hammer.dual_solid_smash") => {
-                    let pullback = 1.0 - move3base.powi(4);
-                    let move1 = move1base.powf(0.5) * pullback;
-                    let move2 = move2base.powi(2) * pullback;
+                    let move1 = move1base.powf(0.25) * multi_action_pullback;
+                    let move2 = move2base.powi(2) * multi_action_pullback;
                     // al=1 on even strikes (left active), ar=1 on odd strikes (right active)
-                    let al = if d.current_action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
+                    let al = if action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
                     let ar = 1.0 - al;
                     // dir: +1 winds/swings left, -1 winds/swings right (mirrors body twist)
                     let dir = al - ar;
