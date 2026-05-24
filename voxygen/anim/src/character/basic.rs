@@ -2487,17 +2487,97 @@ impl Animation for BasicAction {
                 }
             },
             Some("common.abilities.hammer.solid_smash") => {
-                hammer_start(&mut next, s_a);
+                // Temporary dual-wield hammer/mace pose adapted from sword basic attack logic.
+                let hand = d
+                    .ability_info
+                    .and_then(|ability_info| ability_info.hand)
+                    .or_else(|| match d.hands {
+                        (Some(Hands::Two), _) => Some(HandInfo::TwoHanded),
+                        (Some(Hands::One), Some(_)) => Some(HandInfo::MainHand),
+                        _ => None,
+                    });
 
-                next.control.orientation.rotate_x(move1 * 2.7);
-                next.control.orientation.rotate_z(move1 * 1.4);
-                next.control.position += Vec3::new(-12.0, 0.0, 0.0) * move1;
-                next.control.orientation.rotate_x(move1 * -1.2);
-                twist_back(&mut next, move1, 0.8, 0.3, 0.1, 0.5);
+                match hand {
+                    Some(HandInfo::TwoHanded) | None => {
+                        hammer_start(&mut next, s_a);
 
-                twist_forward(&mut next, move2, 1.4, 0.5, 0.3, 1.0);
-                next.control.orientation.rotate_x(move2 * -1.9);
-                next.control.orientation.rotate_z(move2 * 0.6);
+                        next.control.orientation.rotate_x(move1 * 2.7);
+                        next.control.orientation.rotate_z(move1 * 1.4);
+                        next.control.position += Vec3::new(-12.0, 0.0, 0.0) * move1;
+                        next.control.orientation.rotate_x(move1 * -1.2);
+                        twist_back(&mut next, move1, 0.8, 0.3, 0.1, 0.5);
+
+                        twist_forward(&mut next, move2, 1.4, 0.5, 0.3, 1.0);
+                        next.control.orientation.rotate_x(move2 * -1.9);
+                        next.control.orientation.rotate_z(move2 * 0.6);
+                    },
+                    Some(HandInfo::MainHand) => {
+                        dual_wield_start(&mut next);
+                        next.hand_r.position = Vec3::new(-s_a.shl.0, s_a.shl.1, s_a.shl.2);
+                        next.hand_r.orientation =
+                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
+
+                        next.control_r.position = Vec3::new(-s_a.sc.0 + move1, s_a.sc.1 - 7.0, s_a.sc.2);
+                        next.control_r.orientation = Quaternion::rotation_x(s_a.sc.3 - 1.0)
+                            * Quaternion::rotation_y(s_a.sc.4 + move1 * 0.5);
+
+                        next.hand_l.position = Vec3::new(s_a.shl.0, s_a.shl.1, s_a.shl.2);
+                        next.hand_l.orientation =
+                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
+
+                        next.control_l.position = Vec3::new(
+                            s_a.sc.0 + move1 * -2.0 + move2 * 14.0,
+                            s_a.sc.1 + move2 * 4.0,
+                            s_a.sc.2 + move1 * 10.0 - move2 * 12.0,
+                        );
+                        next.control_l.orientation =
+                            Quaternion::rotation_x(s_a.sc.3 + move1 * 1.6 + move2 * -2.6)
+                                * Quaternion::rotation_y(move1 * -0.4 + move2 * 0.6)
+                                * Quaternion::rotation_z(move1 * -0.2 + move2 * -0.2);
+
+                        next.chest.position += Vec3::new(0.0, move1 * -1.0 + move2 * 2.0, 0.0);
+                        next.chest.orientation = Quaternion::rotation_z(move1 * 1.0 + move2 * -1.2);
+                        next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
+                        next.head.orientation = Quaternion::rotation_x(move1 * 0.05 + move2 * -0.25)
+                            * Quaternion::rotation_y(move1 * -0.05 + move2 * 0.05)
+                            * Quaternion::rotation_z(move1 * -0.5 + move2 * 0.4);
+                        next.belt.orientation = Quaternion::rotation_z(move1 * -0.25 + move2 * 0.2);
+                        next.shorts.orientation = Quaternion::rotation_z(move1 * -0.5 + move2 * 0.4);
+                    },
+                    Some(HandInfo::OffHand) => {
+                        dual_wield_start(&mut next);
+                        next.hand_l.position = Vec3::new(s_a.shl.0, s_a.shl.1, s_a.shl.2);
+                        next.hand_l.orientation =
+                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
+
+                        next.control_l.position = Vec3::new(s_a.sc.0 + move1, s_a.sc.1 - 7.0, s_a.sc.2);
+                        next.control_l.orientation = Quaternion::rotation_x(s_a.sc.3 - 1.0)
+                            * Quaternion::rotation_y(s_a.sc.4 + move1 * -0.5);
+
+                        next.hand_r.position = Vec3::new(-s_a.shl.0, s_a.shl.1, s_a.shl.2);
+                        next.hand_r.orientation =
+                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
+
+                        next.control_r.position = Vec3::new(
+                            -s_a.sc.0 + move1 * 2.0 + move2 * -14.0,
+                            s_a.sc.1 + move2 * 4.0,
+                            s_a.sc.2 + move1 * 10.0 - move2 * 12.0,
+                        );
+                        next.control_r.orientation =
+                            Quaternion::rotation_x(s_a.sc.3 + move1 * 1.6 + move2 * -2.6)
+                                * Quaternion::rotation_y(move1 * 0.4 + move2 * -0.6)
+                                * Quaternion::rotation_z(move1 * 0.2 + move2 * 0.2);
+
+                        next.chest.position += Vec3::new(0.0, move1 * -1.0 + move2 * 2.0, 0.0);
+                        next.chest.orientation = Quaternion::rotation_z(move1 * -1.0 + move2 * 1.2);
+                        next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
+                        next.head.orientation = Quaternion::rotation_x(move1 * 0.05 + move2 * -0.25)
+                            * Quaternion::rotation_y(move1 * 0.05 + move2 * -0.05)
+                            * Quaternion::rotation_z(move1 * 0.5 + move2 * -0.4);
+                        next.belt.orientation = Quaternion::rotation_z(move1 * 0.25 + move2 * -0.2);
+                        next.shorts.orientation = Quaternion::rotation_z(move1 * 0.5 + move2 * -0.4);
+                    },
+                }
             },
             Some("common.abilities.hammer.scornful_swipe") => {
                 hammer_start(&mut next, s_a);
