@@ -3696,6 +3696,38 @@ impl Animation for MultiAction {
                     next.control.orientation.rotate_x(move2 * 0.6);
                     next.control.position += Vec3::new(-20.0, 8.0, 0.0) * move2;
                 },
+                Some("common.abilities.hammer.dual_solid_smash") => {
+                    let pullback = 1.0 - move3base.powi(4);
+                    let move1 = move1base.powf(0.5) * pullback;
+                    let move2 = move2base.powi(2) * pullback;
+                    // al=1 on even strikes (left active), ar=1 on odd strikes (right active)
+                    let al = if d.current_action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
+                    let ar = 1.0 - al;
+
+                    dual_wield_start(&mut next);
+
+                    next.control_l.position +=
+                        Vec3::new(move1 * 1.0, move1 * 6.0, move1 * 13.0) * al;
+                    next.control_l.orientation.rotate_x(move1 * 1.0 * al);
+                    next.control_l.orientation.rotate_z(move1 * -0.5 * al);
+                    next.control_r.position +=
+                        Vec3::new(move1 * -1.0, move1 * 6.0, move1 * 13.0) * ar;
+                    next.control_r.orientation.rotate_x(move1 * -1.0 * ar);
+                    next.control_r.orientation.rotate_z(move1 * 0.5 * ar);
+                    next.head.orientation = Quaternion::rotation_x(move1 * 0.15 + move2 * -0.3);
+                    next.chest.position += Vec3::new(0.0, move1 * -1.0, 0.0);
+
+                    next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
+                    next.chest.position += Vec3::new(0.0, move2 * 2.0, 0.0);
+                    next.control_l.orientation.rotate_x(move2 * -2.3 * al);
+                    next.control_l.orientation.rotate_z(move2 * -1.0 * al);
+                    next.control_l.position +=
+                        Vec3::new(move2 * 15.0, move2 * 2.0, move2 * -14.0) * al;
+                    next.control_r.orientation.rotate_x(move2 * -2.3 * ar);
+                    next.control_r.orientation.rotate_z(move2 * 1.0 * ar);
+                    next.control_r.position +=
+                        Vec3::new(move2 * -15.0, move2 * 2.0, move2 * -14.0) * ar;
+                },
                 Some("common.abilities.hammer.iron_tempest") => {
                     if action == 0 {
                         hammer_start(&mut next, s_a);
