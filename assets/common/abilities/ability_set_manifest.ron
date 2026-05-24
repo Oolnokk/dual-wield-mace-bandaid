@@ -193,7 +193,13 @@
     )),
     Tool(Hammer): AbilitySet((
         guard: Some(Simple(None, "common.abilities.hammer.basic_guard")),
-        primary: Simple(None, "common.abilities.hammer.solid_smash"),
+        primary: Contextualized(
+            pseudo_id: "common.abilities.hammer.solid_smash",
+            abilities: [
+                ((dual_wielding_same_kind: true), (None, "common.abilities.hammer.dual_solid_smash")),
+                ((), (None, "common.abilities.hammer.solid_smash")),
+            ],
+        ),
         secondary: Simple(None, "common.abilities.hammer.wide_wallop"),
         abilities: [
             Simple(Hammer(ScornfulSwipe), "common.abilities.hammer.scornful_swipe"),
