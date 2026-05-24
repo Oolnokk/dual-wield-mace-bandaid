@@ -3698,7 +3698,7 @@ impl Animation for MultiAction {
                 },
                 Some("common.abilities.hammer.dual_solid_smash") => {
                     let move1 = move1base.powf(0.25) * multi_action_pullback;
-                    let move2 = move2base.powi(2) * multi_action_pullback;
+                    let move2 = move2base * multi_action_pullback;
                     // al=1 on even strikes (left active), ar=1 on odd strikes (right active)
                     let al = if action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
                     let ar = 1.0 - al;
