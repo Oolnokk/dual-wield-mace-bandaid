@@ -620,6 +620,7 @@ pub fn ability_image(imgs: &img_ids::Imgs, ability_id: &str) -> image::Id {
         "common.abilities.axe.bulkhead" => imgs.axe_bulkhead,
         "common.abilities.axe.capsize" => imgs.axe_capsize,
         // Hammer
+        "common.abilities.hammer.dual_solid_smash" => imgs.hammer_solid_smash,
         "common.abilities.hammer.solid_smash" => imgs.hammer_solid_smash,
         "common.abilities.hammer.wide_wallop" => imgs.hammer_wide_wallop,
         "common.abilities.hammer.scornful_swipe" => imgs.hammer_scornful_swipe,
