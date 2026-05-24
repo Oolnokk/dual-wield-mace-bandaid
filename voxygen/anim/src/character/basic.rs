@@ -2517,6 +2517,8 @@ impl Animation for BasicAction {
                         next.control_l.orientation.rotate_x(move1 * 1.0);
                         next.control_l.orientation.rotate_z(move1 * -0.5);
                         next.control_l.orientation.rotate_y(move1 * -0.3);
+                        next.control_r.position += Vec3::new(move1 * -2.0, move1 * -3.0, move1 * 3.0);
+                        next.control_r.orientation.rotate_x(move1 * -0.5);
                         next.head.orientation = Quaternion::rotation_x(move1 * 0.15 + move2 * -0.3);
                         next.chest.position += Vec3::new(0.0, move1 * -1.0, 0.0);
 
@@ -2525,6 +2527,8 @@ impl Animation for BasicAction {
                         next.control_l.orientation.rotate_x(move2 * -2.3);
                         next.control_l.orientation.rotate_z(move2 * -1.0);
                         next.control_l.position += Vec3::new(move2 * 15.0, move2 * 2.0, move2 * -14.0);
+                        next.control_r.position += Vec3::new(move2 * -5.0, move2 * -2.0, move2 * 3.0);
+                        next.control_r.orientation.rotate_x(move2 * 0.8);
                     },
                     Some(HandInfo::OffHand) => {
                         dual_wield_start(&mut next);
