@@ -2689,18 +2689,35 @@ impl Animation for BasicAction {
                 next.control.position += Vec3::new(0.0, 12.0, 10.0) * move2;
             },
             Some("common.abilities.hammer.wide_wallop") => {
-                hammer_start(&mut next, s_a);
                 let move1 = chargebase.min(1.0) * pullback;
                 let tension = (chargebase * 7.0).sin();
 
-                next.control.orientation.rotate_x(move1 * 1.1 + move2 * 0.6);
-                twist_back(&mut next, move1 + tension / 25.0, 1.7, 0.7, 0.3, 1.1);
-                next.control.orientation.rotate_y(move1 * -0.8);
-                next.control.position += Vec3::new(0.0, 0.0, 6.0) * move1;
+                match d.ability_info.and_then(|ai| ai.hand) {
+                    Some(HandInfo::OffHand) => {
+                        dual_wield_start(&mut next);
 
-                twist_forward(&mut next, move2, 4.8, 1.7, 0.7, 3.2);
-                next.control.orientation.rotate_y(move2 * 2.0);
-                next.control.orientation.rotate_z(move2 * -1.8);
+                        next.control_r.orientation.rotate_x(move1 * 1.1 + move2 * 0.6);
+                        twist_forward(&mut next, move1 + tension / 25.0, 1.7, 0.7, 0.3, 1.1);
+                        next.control_r.orientation.rotate_y(move1 * 0.8);
+                        next.control_r.position += Vec3::new(0.0, 0.0, 6.0) * move1;
+
+                        twist_back(&mut next, move2, 4.8, 1.7, 0.7, 3.2);
+                        next.control_r.orientation.rotate_y(move2 * -2.0);
+                        next.control_r.orientation.rotate_z(move2 * 1.8);
+                    },
+                    _ => {
+                        hammer_start(&mut next, s_a);
+
+                        next.control.orientation.rotate_x(move1 * 1.1 + move2 * 0.6);
+                        twist_back(&mut next, move1 + tension / 25.0, 1.7, 0.7, 0.3, 1.1);
+                        next.control.orientation.rotate_y(move1 * -0.8);
+                        next.control.position += Vec3::new(0.0, 0.0, 6.0) * move1;
+
+                        twist_forward(&mut next, move2, 4.8, 1.7, 0.7, 3.2);
+                        next.control.orientation.rotate_y(move2 * 2.0);
+                        next.control.orientation.rotate_z(move2 * -1.8);
+                    },
+                }
             },
             Some("common.abilities.hammer.intercept") => {
                 hammer_start(&mut next, s_a);
