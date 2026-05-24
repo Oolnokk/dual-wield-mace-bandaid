@@ -3703,30 +3703,28 @@ impl Animation for MultiAction {
                     // al=1 on even strikes (left active), ar=1 on odd strikes (right active)
                     let al = if d.current_action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
                     let ar = 1.0 - al;
+                    // dir: +1 winds/swings left, -1 winds/swings right (mirrors body twist)
+                    let dir = al - ar;
 
                     dual_wield_start(&mut next);
 
-                    next.control_l.position +=
-                        Vec3::new(move1 * 1.0, move1 * 6.0, move1 * 13.0) * al;
-                    next.control_l.orientation.rotate_x(move1 * 1.0 * al);
-                    next.control_l.orientation.rotate_z(move1 * -0.5 * al);
-                    next.control_r.position +=
-                        Vec3::new(move1 * -1.0, move1 * 6.0, move1 * 13.0) * ar;
-                    next.control_r.orientation.rotate_x(move1 * -1.0 * ar);
-                    next.control_r.orientation.rotate_z(move1 * 0.5 * ar);
-                    next.head.orientation = Quaternion::rotation_x(move1 * 0.15 + move2 * -0.3);
-                    next.chest.position += Vec3::new(0.0, move1 * -1.0, 0.0);
+                    // Buildup: active arm winds up like wide_wallop charge
+                    next.control_l.orientation.rotate_x(move1 * 1.1 * al);
+                    next.control_r.orientation.rotate_x(move1 * 1.1 * ar);
+                    twist_back(&mut next, move1 * dir, 1.7, 0.7, 0.3, 1.1);
+                    next.control_l.orientation.rotate_y(move1 * -0.8 * al);
+                    next.control_r.orientation.rotate_y(move1 * 0.8 * ar);
+                    next.control_l.position += Vec3::new(0.0, 0.0, 6.0) * move1 * al;
+                    next.control_r.position += Vec3::new(0.0, 0.0, 6.0) * move1 * ar;
 
-                    next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
-                    next.chest.position += Vec3::new(0.0, move2 * 2.0, 0.0);
-                    next.control_l.orientation.rotate_x(move2 * -2.3 * al);
-                    next.control_l.orientation.rotate_z(move2 * -1.0 * al);
-                    next.control_l.position +=
-                        Vec3::new(move2 * 15.0, move2 * 2.0, move2 * -14.0) * al;
-                    next.control_r.orientation.rotate_x(move2 * -2.3 * ar);
-                    next.control_r.orientation.rotate_z(move2 * 1.0 * ar);
-                    next.control_r.position +=
-                        Vec3::new(move2 * -15.0, move2 * 2.0, move2 * -14.0) * ar;
+                    // Action: active arm swings through like wide_wallop swing
+                    next.control_l.orientation.rotate_x(move2 * 0.6 * al);
+                    next.control_r.orientation.rotate_x(move2 * 0.6 * ar);
+                    twist_forward(&mut next, move2 * dir, 4.8, 1.7, 0.7, 3.2);
+                    next.control_l.orientation.rotate_y(move2 * 2.0 * al);
+                    next.control_r.orientation.rotate_y(move2 * -2.0 * ar);
+                    next.control_l.orientation.rotate_z(move2 * -1.8 * al);
+                    next.control_r.orientation.rotate_z(move2 * 1.8 * ar);
                 },
                 Some("common.abilities.hammer.iron_tempest") => {
                     if action == 0 {
