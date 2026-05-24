@@ -144,7 +144,13 @@
     )),
     Tool(Axe): AbilitySet((
         guard: Some(Simple(None, "common.abilities.axe.basic_guard")),
-        primary: Simple(None, "common.abilities.axe.triple_chop"),
+        primary: Contextualized(
+            pseudo_id: "common.abilities.axe.triple_chop",
+            abilities: [
+                ((dual_wielding_same_kind: true), (None, "common.abilities.axe.dual_triple_chop")),
+                ((), (None, "common.abilities.axe.triple_chop")),
+            ],
+        ),
         secondary: Simple(None, "common.abilities.axe.cleave"),
         abilities: [
             Simple(Axe(BrutalSwing), "common.abilities.axe.brutal_swing"),

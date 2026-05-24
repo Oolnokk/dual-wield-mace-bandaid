@@ -595,6 +595,7 @@ pub fn ability_image(imgs: &img_ids::Imgs, ability_id: &str) -> image::Id {
         "common.abilities.sword.cleaving_blade_fever" => imgs.sword_cleaving_blade_fever,
         "common.abilities.sword.cleaving_sky_splitter" => imgs.sword_cleaving_sky_splitter,
         // Axe
+        "common.abilities.axe.dual_triple_chop" => imgs.axe_triple_chop,
         "common.abilities.axe.triple_chop" => imgs.axe_triple_chop,
         "common.abilities.axe.cleave" => imgs.axe_cleave,
         "common.abilities.axe.brutal_swing" => imgs.axe_brutal_swing,

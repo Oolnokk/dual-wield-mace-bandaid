@@ -1976,30 +1976,47 @@ impl Animation for BasicAction {
                 }
             },
             Some("common.abilities.axe.cleave") => {
-                legacy_initialize();
                 let move1 = chargebase.min(1.0) * pullback;
                 let move2 = move2base.powi(2) * pullback;
                 let tension = (chargebase * 20.0).sin();
-
-                next.hand_l.position = Vec3::new(s_a.ahl.0, s_a.ahl.1, s_a.ahl.2);
-                next.hand_l.orientation =
-                    Quaternion::rotation_x(s_a.ahl.3) * Quaternion::rotation_y(s_a.ahl.4);
-                next.hand_r.position = Vec3::new(s_a.ahr.0, s_a.ahr.1, s_a.ahr.2);
-                next.hand_r.orientation =
-                    Quaternion::rotation_x(s_a.ahr.3) * Quaternion::rotation_z(s_a.ahr.5);
-
-                next.control.position = Vec3::new(
-                    s_a.ac.0 + 0.5 + move1 * 7.0,
-                    s_a.ac.1 + 9.0 + move1 * -4.0,
-                    s_a.ac.2 + 2.5 + move1 * 18.0 + tension / 5.0,
+                let is_dual = matches!(
+                    d.ability_info.and_then(|ai| ai.hand),
+                    Some(HandInfo::MainHand | HandInfo::OffHand)
                 );
-                next.control.orientation =
-                    Quaternion::rotation_x(s_a.ac.3 - 2.25 + move1 * -1.0 + tension / 30.0)
-                        * Quaternion::rotation_y(s_a.ac.4 - PI)
-                        * Quaternion::rotation_z(s_a.ac.5 - 0.2 - move1 * PI);
 
-                next.control.orientation.rotate_x(move2 * -3.0);
-                next.control.position += Vec3::new(0.0, move2 * 8.0, move2 * -30.0);
+                if is_dual {
+                    dual_wield_start(&mut next);
+                    next.control_r.position = Vec3::new(
+                        s_a.ac.0 + 0.5 + move1 * 7.0,
+                        s_a.ac.1 + 9.0 + move1 * -4.0,
+                        s_a.ac.2 + 2.5 + move1 * 18.0 + tension / 5.0,
+                    );
+                    next.control_r.orientation =
+                        Quaternion::rotation_x(s_a.ac.3 - 2.25 + move1 * -1.0 + tension / 30.0)
+                            * Quaternion::rotation_y(s_a.ac.4)
+                            * Quaternion::rotation_z(s_a.ac.5 - 0.2 - move1 * PI);
+                    next.control_r.orientation.rotate_x(move2 * -3.0);
+                    next.control_r.position += Vec3::new(0.0, move2 * 8.0, move2 * -30.0);
+                } else {
+                    legacy_initialize();
+                    next.hand_l.position = Vec3::new(s_a.ahl.0, s_a.ahl.1, s_a.ahl.2);
+                    next.hand_l.orientation =
+                        Quaternion::rotation_x(s_a.ahl.3) * Quaternion::rotation_y(s_a.ahl.4);
+                    next.hand_r.position = Vec3::new(s_a.ahr.0, s_a.ahr.1, s_a.ahr.2);
+                    next.hand_r.orientation =
+                        Quaternion::rotation_x(s_a.ahr.3) * Quaternion::rotation_z(s_a.ahr.5);
+                    next.control.position = Vec3::new(
+                        s_a.ac.0 + 0.5 + move1 * 7.0,
+                        s_a.ac.1 + 9.0 + move1 * -4.0,
+                        s_a.ac.2 + 2.5 + move1 * 18.0 + tension / 5.0,
+                    );
+                    next.control.orientation =
+                        Quaternion::rotation_x(s_a.ac.3 - 2.25 + move1 * -1.0 + tension / 30.0)
+                            * Quaternion::rotation_y(s_a.ac.4 - PI)
+                            * Quaternion::rotation_z(s_a.ac.5 - 0.2 - move1 * PI);
+                    next.control.orientation.rotate_x(move2 * -3.0);
+                    next.control.position += Vec3::new(0.0, move2 * 8.0, move2 * -30.0);
+                }
             },
             Some("common.abilities.axe.execute") => {
                 legacy_initialize();

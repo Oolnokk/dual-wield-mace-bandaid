@@ -3696,7 +3696,10 @@ impl Animation for MultiAction {
                     next.control.orientation.rotate_x(move2 * 0.6);
                     next.control.position += Vec3::new(-20.0, 8.0, 0.0) * move2;
                 },
-                Some("common.abilities.hammer.dual_solid_smash") => {
+                Some(
+                    "common.abilities.hammer.dual_solid_smash"
+                    | "common.abilities.axe.dual_triple_chop",
+                ) => {
                     let move1 = move1base.powf(0.25) * multi_action_pullback;
                     let move2 = move2base * multi_action_pullback;
                     let dir = if d.current_action % 2 == 0 { 1.0_f32 } else { -1.0_f32 };
