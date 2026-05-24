@@ -97,6 +97,9 @@ pub struct StaticData {
     /// Whether or not the state should progress through all strikes
     /// automatically once the state is entered
     pub auto_progress: bool,
+    /// When true, the combo loops back from the last strike to the first as
+    /// long as input is held, only playing the final recover on release
+    pub loop_while_held: bool,
     pub ability_info: AbilityInfo,
 }
 /// A sequence of attacks that can incrementally become faster and more
@@ -168,9 +171,9 @@ impl CharacterBehavior for Data {
                     || self.static_data.auto_progress)
                     && let CharacterState::ComboMelee2(c) = &mut update.character
                 {
-                    // Only have the next strike skip the recover period of this strike if not
-                    // every strike in the combo is complete yet
-                    c.start_next_strike = (c.completed_strikes + 1) < c.static_data.strikes.len();
+                    // Loop indefinitely while held, or stop after the last strike
+                    c.start_next_strike = c.static_data.loop_while_held
+                        || (c.completed_strikes + 1) < c.static_data.strikes.len();
                 }
                 if self.timer.as_secs_f32()
                     > strike_data.hit_timing * strike_data.swing_duration.as_secs_f32()
