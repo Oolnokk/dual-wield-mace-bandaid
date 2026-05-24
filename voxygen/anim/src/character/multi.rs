@@ -3700,11 +3700,6 @@ impl Animation for MultiAction {
                     let move1 = move1base.powf(0.25) * multi_action_pullback;
                     let move2 = move2base * multi_action_pullback;
                     let dir = if d.current_action % 2 == 0 { 1.0_f32 } else { -1.0_f32 };
-                    // How far into current buildup (0→1); used to blend out previous arm
-                    let buildup_progress = match d.stage_section {
-                        Some(StageSection::Buildup) => anim_time,
-                        _ => 1.0,
-                    };
 
                     if action == 0 {
                         dual_wield_start(&mut next);
@@ -3721,7 +3716,6 @@ impl Animation for MultiAction {
                         Quaternion::rotation_z(move1 * -1.1 * dir + move2 * 3.2 * dir);
 
                     if action == d.current_action {
-                        // Current action: active arm winds up and swings
                         let al = if d.current_action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
                         let ar = 1.0 - al;
 
@@ -3737,21 +3731,6 @@ impl Animation for MultiAction {
                         next.control_r.orientation.rotate_y(move2 * -2.0 * ar);
                         next.control_l.orientation.rotate_z(move2 * -1.8 * al);
                         next.control_r.orientation.rotate_z(move2 * 1.8 * ar);
-                    } else if d.current_action > 0 && action == d.current_action - 1 {
-                        // Previous action: blend the completed swing pose back to neutral
-                        // during the new action's buildup so there's no sudden snap
-                        let al = if action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
-                        let ar = 1.0 - al;
-                        let blend = 1.0 - buildup_progress;
-
-                        next.control_l.orientation.rotate_x((1.1 + 0.6) * al * blend);
-                        next.control_r.orientation.rotate_x((1.1 + 0.6) * ar * blend);
-                        next.control_l.orientation.rotate_y((-0.8 + 2.0) * al * blend);
-                        next.control_r.orientation.rotate_y((0.8 - 2.0) * ar * blend);
-                        next.control_l.position += Vec3::new(0.0, 0.0, 6.0) * al * blend;
-                        next.control_r.position += Vec3::new(0.0, 0.0, 6.0) * ar * blend;
-                        next.control_l.orientation.rotate_z(-1.8 * al * blend);
-                        next.control_r.orientation.rotate_z(1.8 * ar * blend);
                     }
                 },
                 Some("common.abilities.hammer.iron_tempest") => {
