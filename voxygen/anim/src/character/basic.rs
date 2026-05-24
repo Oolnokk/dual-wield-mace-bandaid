@@ -2513,44 +2513,34 @@ impl Animation for BasicAction {
                     Some(HandInfo::MainHand) => {
                         dual_wield_start(&mut next);
 
-                        next.control_l.position += Vec3::new(0.0, 0.0, move1 * 10.0);
-                        next.control_l.orientation.rotate_x(move1 * 1.6);
-                        next.control_l.orientation.rotate_z(move1 * -0.2);
-                        next.chest.position += Vec3::new(0.0, move1 * -1.0 + move2 * 2.0, 0.0);
-                        next.chest.orientation = Quaternion::rotation_z(move1 * 1.0 + move2 * -1.2);
-                        next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
-                        next.head.orientation = Quaternion::rotation_x(move1 * 0.05 + move2 * -0.25)
-                            * Quaternion::rotation_y(move1 * -0.05 + move2 * 0.05)
-                            * Quaternion::rotation_z(move1 * -0.5 + move2 * 0.4);
-                        next.belt.orientation = Quaternion::rotation_z(move1 * -0.25 + move2 * 0.2);
-                        next.shorts.orientation = Quaternion::rotation_z(move1 * -0.5 + move2 * 0.4);
+                        next.control_l.position += Vec3::new(move1 * 1.0, move1 * 6.0, move1 * 13.0);
+                        next.control_l.orientation.rotate_x(move1 * 1.0);
+                        next.control_l.orientation.rotate_z(move1 * -0.5);
+                        next.control_l.orientation.rotate_y(move1 * -0.3);
+                        next.head.orientation = Quaternion::rotation_x(move1 * 0.15 + move2 * -0.3);
+                        next.chest.position += Vec3::new(0.0, move1 * -1.0, 0.0);
 
-                        next.control_l.position +=
-                            Vec3::new(move2 * 14.0, move2 * 4.0, move2 * -12.0);
-                        next.control_l.orientation.rotate_x(move2 * -2.6);
-                        next.control_l.orientation.rotate_y(move2 * 0.6);
-                        next.control_l.orientation.rotate_z(move2 * -0.2);
+                        next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
+                        next.chest.position += Vec3::new(0.0, move2 * 2.0, 0.0);
+                        next.control_l.orientation.rotate_x(move2 * -2.3);
+                        next.control_l.orientation.rotate_z(move2 * -1.0);
+                        next.control_l.position += Vec3::new(move2 * 15.0, move2 * 2.0, move2 * -14.0);
                     },
                     Some(HandInfo::OffHand) => {
                         dual_wield_start(&mut next);
 
-                        next.control_r.position += Vec3::new(0.0, 0.0, move1 * 10.0);
-                        next.control_r.orientation.rotate_x(move1 * 1.6);
-                        next.control_r.orientation.rotate_z(move1 * 0.2);
-                        next.chest.position += Vec3::new(0.0, move1 * -1.0 + move2 * 2.0, 0.0);
-                        next.chest.orientation = Quaternion::rotation_z(move1 * -1.0 + move2 * 1.2);
-                        next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
-                        next.head.orientation = Quaternion::rotation_x(move1 * 0.05 + move2 * -0.25)
-                            * Quaternion::rotation_y(move1 * 0.05 + move2 * -0.05)
-                            * Quaternion::rotation_z(move1 * 0.5 + move2 * -0.4);
-                        next.belt.orientation = Quaternion::rotation_z(move1 * 0.25 + move2 * -0.2);
-                        next.shorts.orientation = Quaternion::rotation_z(move1 * 0.5 + move2 * -0.4);
+                        next.control_r.position += Vec3::new(move1 * -1.0, move1 * 6.0, move1 * 13.0);
+                        next.control_r.orientation.rotate_x(move1 * -1.0);
+                        next.control_r.orientation.rotate_z(move1 * 0.5);
+                        next.control_r.orientation.rotate_y(move1 * 0.3);
+                        next.head.orientation = Quaternion::rotation_x(move1 * 0.15 + move2 * -0.3);
+                        next.chest.position += Vec3::new(0.0, move1 * -1.0, 0.0);
 
-                        next.control_r.position +=
-                            Vec3::new(move2 * -14.0, move2 * 4.0, move2 * -12.0);
-                        next.control_r.orientation.rotate_x(move2 * -2.6);
-                        next.control_r.orientation.rotate_y(move2 * -0.6);
-                        next.control_r.orientation.rotate_z(move2 * 0.2);
+                        next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
+                        next.chest.position += Vec3::new(0.0, move2 * 2.0, 0.0);
+                        next.control_r.orientation.rotate_x(move2 * -1.6);
+                        next.control_r.orientation.rotate_z(move2 * 1.0);
+                        next.control_r.position += Vec3::new(move2 * -12.0, move2 * 2.0, move2 * -14.0);
                     },
                 }
             },
