@@ -2487,7 +2487,6 @@ impl Animation for BasicAction {
                 }
             },
             Some("common.abilities.hammer.solid_smash") => {
-                // Temporary dual-wield hammer/mace pose adapted from sword basic attack logic.
                 let hand = d
                     .ability_info
                     .and_then(|ability_info| ability_info.hand)
@@ -2513,28 +2512,10 @@ impl Animation for BasicAction {
                     },
                     Some(HandInfo::MainHand) => {
                         dual_wield_start(&mut next);
-                        next.hand_r.position = Vec3::new(-s_a.shl.0, s_a.shl.1, s_a.shl.2);
-                        next.hand_r.orientation =
-                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
 
-                        next.control_r.position = Vec3::new(-s_a.sc.0 + move1, s_a.sc.1 - 7.0, s_a.sc.2);
-                        next.control_r.orientation = Quaternion::rotation_x(s_a.sc.3 - 1.0)
-                            * Quaternion::rotation_y(s_a.sc.4 + move1 * 0.5);
-
-                        next.hand_l.position = Vec3::new(s_a.shl.0, s_a.shl.1, s_a.shl.2);
-                        next.hand_l.orientation =
-                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
-
-                        next.control_l.position = Vec3::new(
-                            s_a.sc.0 + move1 * -2.0 + move2 * 14.0,
-                            s_a.sc.1 + move2 * 4.0,
-                            s_a.sc.2 + move1 * 10.0 - move2 * 12.0,
-                        );
-                        next.control_l.orientation =
-                            Quaternion::rotation_x(s_a.sc.3 + move1 * 1.6 + move2 * -2.6)
-                                * Quaternion::rotation_y(move1 * -0.4 + move2 * 0.6)
-                                * Quaternion::rotation_z(move1 * -0.2 + move2 * -0.2);
-
+                        next.control_l.position += Vec3::new(0.0, 0.0, move1 * 10.0);
+                        next.control_l.orientation.rotate_x(move1 * 1.6);
+                        next.control_l.orientation.rotate_z(move1 * -0.2);
                         next.chest.position += Vec3::new(0.0, move1 * -1.0 + move2 * 2.0, 0.0);
                         next.chest.orientation = Quaternion::rotation_z(move1 * 1.0 + move2 * -1.2);
                         next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
@@ -2543,31 +2524,19 @@ impl Animation for BasicAction {
                             * Quaternion::rotation_z(move1 * -0.5 + move2 * 0.4);
                         next.belt.orientation = Quaternion::rotation_z(move1 * -0.25 + move2 * 0.2);
                         next.shorts.orientation = Quaternion::rotation_z(move1 * -0.5 + move2 * 0.4);
+
+                        next.control_l.position +=
+                            Vec3::new(move2 * 14.0, move2 * 4.0, move2 * -12.0);
+                        next.control_l.orientation.rotate_x(move2 * -2.6);
+                        next.control_l.orientation.rotate_y(move2 * 0.6);
+                        next.control_l.orientation.rotate_z(move2 * -0.2);
                     },
                     Some(HandInfo::OffHand) => {
                         dual_wield_start(&mut next);
-                        next.hand_l.position = Vec3::new(s_a.shl.0, s_a.shl.1, s_a.shl.2);
-                        next.hand_l.orientation =
-                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
 
-                        next.control_l.position = Vec3::new(s_a.sc.0 + move1, s_a.sc.1 - 7.0, s_a.sc.2);
-                        next.control_l.orientation = Quaternion::rotation_x(s_a.sc.3 - 1.0)
-                            * Quaternion::rotation_y(s_a.sc.4 + move1 * -0.5);
-
-                        next.hand_r.position = Vec3::new(-s_a.shl.0, s_a.shl.1, s_a.shl.2);
-                        next.hand_r.orientation =
-                            Quaternion::rotation_x(s_a.shl.3) * Quaternion::rotation_y(s_a.shl.4);
-
-                        next.control_r.position = Vec3::new(
-                            -s_a.sc.0 + move1 * 2.0 + move2 * -14.0,
-                            s_a.sc.1 + move2 * 4.0,
-                            s_a.sc.2 + move1 * 10.0 - move2 * 12.0,
-                        );
-                        next.control_r.orientation =
-                            Quaternion::rotation_x(s_a.sc.3 + move1 * 1.6 + move2 * -2.6)
-                                * Quaternion::rotation_y(move1 * 0.4 + move2 * -0.6)
-                                * Quaternion::rotation_z(move1 * 0.2 + move2 * 0.2);
-
+                        next.control_r.position += Vec3::new(0.0, 0.0, move1 * 10.0);
+                        next.control_r.orientation.rotate_x(move1 * 1.6);
+                        next.control_r.orientation.rotate_z(move1 * 0.2);
                         next.chest.position += Vec3::new(0.0, move1 * -1.0 + move2 * 2.0, 0.0);
                         next.chest.orientation = Quaternion::rotation_z(move1 * -1.0 + move2 * 1.2);
                         next.head.position += Vec3::new(0.0, move2 * 1.0, 0.0);
@@ -2576,8 +2545,25 @@ impl Animation for BasicAction {
                             * Quaternion::rotation_z(move1 * 0.5 + move2 * -0.4);
                         next.belt.orientation = Quaternion::rotation_z(move1 * 0.25 + move2 * -0.2);
                         next.shorts.orientation = Quaternion::rotation_z(move1 * 0.5 + move2 * -0.4);
+
+                        next.control_r.position +=
+                            Vec3::new(move2 * -14.0, move2 * 4.0, move2 * -12.0);
+                        next.control_r.orientation.rotate_x(move2 * -2.6);
+                        next.control_r.orientation.rotate_y(move2 * -0.6);
+                        next.control_r.orientation.rotate_z(move2 * 0.2);
                     },
                 }
+            },
+            Some("common.abilities.hammer.vigorous_bash") => {
+                hammer_start(&mut next, s_a);
+
+                next.control.orientation.rotate_x(move1 * 2.2);
+                next.control.position += Vec3::new(-8.0, 0.0, 12.0) * move1;
+                twist_back(&mut next, move1, 0.7, 0.3, 0.1, 0.4);
+
+                twist_forward(&mut next, move2, 1.6, 0.6, 0.3, 1.1);
+                next.control.orientation.rotate_x(move2 * -3.0);
+                next.control.position += Vec3::new(4.0, 6.0, -14.0) * move2;
             },
             Some("common.abilities.hammer.scornful_swipe") => {
                 hammer_start(&mut next, s_a);
@@ -2608,6 +2594,17 @@ impl Animation for BasicAction {
                 next.control.orientation.rotate_z(move2 * -2.3);
                 next.control.position += Vec3::new(6.0, 0.0, 6.0) * move2;
             },
+            Some("common.abilities.hammer.iron_tempest") => {
+                hammer_start(&mut next, s_a);
+
+                twist_back(&mut next, move1, 1.6, 0.6, 0.3, 1.1);
+                next.control.orientation.rotate_x(move1 * 0.8);
+
+                next.torso.orientation.rotate_z(move2base * -2.0 * PI);
+                twist_forward(&mut next, move2, 3.0, 1.0, 0.7, 1.6);
+                next.control.orientation.rotate_z(move2 * -2.0);
+                next.control.position += Vec3::new(4.0, 0.0, 4.0) * move2;
+            },
             Some("common.abilities.hammer.dual_heavy_whorl") => {
                 dual_wield_start(&mut next);
 
@@ -2620,6 +2617,19 @@ impl Animation for BasicAction {
                 twist_forward(&mut next, move2, 3.4, 1.2, 0.8, 1.8);
                 next.control_l.orientation.rotate_z(move2 * -2.3);
                 next.control_r.orientation.rotate_z(move2 * -2.3);
+            },
+            Some("common.abilities.hammer.dual_iron_tempest") => {
+                dual_wield_start(&mut next);
+
+                twist_back(&mut next, move1, 1.6, 0.6, 0.3, 1.1);
+                next.control_l.orientation.rotate_y(move1 * -PI / 2.0);
+                next.control_r.orientation.rotate_y(move1 * -PI / 2.0);
+                next.control.position += Vec3::new(0.0, 0.0, 3.0) * move1;
+
+                next.torso.orientation.rotate_z(move2base * -2.0 * PI);
+                twist_forward(&mut next, move2, 3.0, 1.0, 0.7, 1.6);
+                next.control_l.orientation.rotate_z(move2 * -2.0);
+                next.control_r.orientation.rotate_z(move2 * -2.0);
             },
             Some("common.abilities.hammer.breach") => {
                 hammer_start(&mut next, s_a);
