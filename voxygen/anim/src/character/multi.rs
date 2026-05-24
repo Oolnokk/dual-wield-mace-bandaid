@@ -3699,42 +3699,43 @@ impl Animation for MultiAction {
                 Some("common.abilities.hammer.dual_solid_smash") => {
                     let move1 = move1base.powf(0.25) * multi_action_pullback;
                     let move2 = move2base * multi_action_pullback;
-                    // al=1 on even strikes (left active), ar=1 on odd strikes (right active)
-                    let al = if action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
-                    let ar = 1.0 - al;
-                    // dir drives body rotation; uses d.current_action so assignments
-                    // always reflect the current strike and don't accumulate
+                    // dir drives body rotation based on current strike direction
                     let dir = if d.current_action % 2 == 0 { 1.0_f32 } else { -1.0_f32 };
 
-                    // Only call dual_wield_start once per frame so arm bone
-                    // rotations from each action accumulate correctly
                     if action == 0 {
                         dual_wield_start(&mut next);
                     }
 
-                    // Body: absolute assignments so past actions don't stack rotations
+                    // Body: absolute assignments matching wide_wallop magnitude so
+                    // the weapon follows through at the correct angle
                     next.chest.orientation =
-                        Quaternion::rotation_z(move1 * 1.2 * dir + move2 * -2.0 * dir);
+                        Quaternion::rotation_z(move1 * 1.7 * dir + move2 * -4.8 * dir);
                     next.head.orientation =
-                        Quaternion::rotation_z(move1 * -0.5 * dir + move2 * 0.9 * dir);
+                        Quaternion::rotation_z(move1 * -0.7 * dir + move2 * 1.7 * dir);
                     next.belt.orientation =
-                        Quaternion::rotation_z(move1 * -0.2 * dir + move2 * 0.4 * dir);
+                        Quaternion::rotation_z(move1 * -0.3 * dir + move2 * 0.7 * dir);
                     next.shorts.orientation =
-                        Quaternion::rotation_z(move1 * -0.6 * dir + move2 * 1.8 * dir);
+                        Quaternion::rotation_z(move1 * -1.1 * dir + move2 * 3.2 * dir);
 
-                    // Active arm: wide_wallop-style wind-up and swing
-                    next.control_l.orientation.rotate_x(move1 * 1.1 * al);
-                    next.control_r.orientation.rotate_x(move1 * 1.1 * ar);
-                    next.control_l.orientation.rotate_y(move1 * -0.8 * al);
-                    next.control_r.orientation.rotate_y(move1 * 0.8 * ar);
-                    next.control_l.position += Vec3::new(0.0, 0.0, 6.0) * move1 * al;
-                    next.control_r.position += Vec3::new(0.0, 0.0, 6.0) * move1 * ar;
-                    next.control_l.orientation.rotate_x(move2 * 0.6 * al);
-                    next.control_r.orientation.rotate_x(move2 * 0.6 * ar);
-                    next.control_l.orientation.rotate_y(move2 * 2.0 * al);
-                    next.control_r.orientation.rotate_y(move2 * -2.0 * ar);
-                    next.control_l.orientation.rotate_z(move2 * -1.8 * al);
-                    next.control_r.orientation.rotate_z(move2 * 1.8 * ar);
+                    // Arms: only apply motion for the current action so each strike
+                    // starts clean from dual_wield_start without accumulation
+                    if action == d.current_action {
+                        let al = if d.current_action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
+                        let ar = 1.0 - al;
+
+                        next.control_l.orientation.rotate_x(move1 * 1.1 * al);
+                        next.control_r.orientation.rotate_x(move1 * 1.1 * ar);
+                        next.control_l.orientation.rotate_y(move1 * -0.8 * al);
+                        next.control_r.orientation.rotate_y(move1 * 0.8 * ar);
+                        next.control_l.position += Vec3::new(0.0, 0.0, 6.0) * move1 * al;
+                        next.control_r.position += Vec3::new(0.0, 0.0, 6.0) * move1 * ar;
+                        next.control_l.orientation.rotate_x(move2 * 0.6 * al);
+                        next.control_r.orientation.rotate_x(move2 * 0.6 * ar);
+                        next.control_l.orientation.rotate_y(move2 * 2.0 * al);
+                        next.control_r.orientation.rotate_y(move2 * -2.0 * ar);
+                        next.control_l.orientation.rotate_z(move2 * -1.8 * al);
+                        next.control_r.orientation.rotate_z(move2 * 1.8 * ar);
+                    }
                 },
                 Some("common.abilities.hammer.iron_tempest") => {
                     if action == 0 {
