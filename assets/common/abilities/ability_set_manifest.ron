@@ -13,12 +13,12 @@
         primary: Contextualized(
             pseudo_id: "veloren.core.pseudo_abilities.sword.double_slash",
             abilities: [
-                ((dual_wielding: true, stance: Sword(Heavy)), (None, "common.abilities.sword.heavy_dual_double_slash")),
-                ((dual_wielding: true, stance: Sword(Agile)), (None, "common.abilities.sword.agile_dual_double_slash")),
-                ((dual_wielding: true, stance: Sword(Defensive)), (None, "common.abilities.sword.defensive_dual_double_slash")),
-                ((dual_wielding: true, stance: Sword(Crippling)), (None, "common.abilities.sword.crippling_dual_double_slash")),
-                ((dual_wielding: true, stance: Sword(Cleaving)), (None, "common.abilities.sword.cleaving_dual_double_slash")),
-                ((dual_wielding: true), (None, "common.abilities.sword.basic_dual_double_slash")),
+                ((dual_wielding_same_kind: true, stance: Sword(Heavy)), (None, "common.abilities.sword.heavy_dual_double_slash")),
+                ((dual_wielding_same_kind: true, stance: Sword(Agile)), (None, "common.abilities.sword.agile_dual_double_slash")),
+                ((dual_wielding_same_kind: true, stance: Sword(Defensive)), (None, "common.abilities.sword.defensive_dual_double_slash")),
+                ((dual_wielding_same_kind: true, stance: Sword(Crippling)), (None, "common.abilities.sword.crippling_dual_double_slash")),
+                ((dual_wielding_same_kind: true, stance: Sword(Cleaving)), (None, "common.abilities.sword.cleaving_dual_double_slash")),
+                ((dual_wielding_same_kind: true), (None, "common.abilities.sword.basic_dual_double_slash")),
                 ((stance: Sword(Heavy)), (None, "common.abilities.sword.heavy_double_slash")),
                 ((stance: Sword(Agile)), (None, "common.abilities.sword.agile_double_slash")),
                 ((stance: Sword(Defensive)), (None, "common.abilities.sword.defensive_double_slash")),
@@ -153,7 +153,7 @@
         primary: Contextualized(
             pseudo_id: "common.abilities.axe.triple_chop",
             abilities: [
-                ((dual_wielding: true), (None, "common.abilities.axe.dual_triple_chop")),
+                ((dual_wielding_same_kind: true), (None, "common.abilities.axe.dual_triple_chop")),
                 ((), (None, "common.abilities.axe.triple_chop")),
             ],
         ),
@@ -208,7 +208,7 @@
         primary: Contextualized(
             pseudo_id: "common.abilities.hammer.solid_smash",
             abilities: [
-                ((dual_wielding: true), (None, "common.abilities.hammer.dual_solid_smash")),
+                ((dual_wielding_same_kind: true), (None, "common.abilities.hammer.dual_solid_smash")),
                 ((), (None, "common.abilities.hammer.solid_smash")),
             ],
         ),
