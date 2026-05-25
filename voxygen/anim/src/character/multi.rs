@@ -3370,115 +3370,84 @@ impl Animation for MultiAction {
                 // ==================================
                 //                AXE
                 // ==================================
-                Some("common.abilities.axe.triple_chop") => {
-                    if let Some(ability_info) = d.ability_info {
-                        match ability_info.hand {
-                            Some(HandInfo::MainHand) => {
-                                if action == 0 {
-                                    dual_wield_start(&mut next);
-                                }
+                Some("common.abilities.axe.triple_chop") => match action {
+                    0 => {
+                        next.hand_l.position =
+                            Vec3::new(s_a.ahl.0, s_a.ahl.1, s_a.ahl.2);
+                        next.hand_l.orientation = Quaternion::rotation_x(s_a.ahl.3)
+                            * Quaternion::rotation_y(s_a.ahl.4);
+                        next.hand_r.position =
+                            Vec3::new(s_a.ahr.0, s_a.ahr.1, s_a.ahr.2);
+                        next.hand_r.orientation = Quaternion::rotation_x(s_a.ahr.3)
+                            * Quaternion::rotation_z(s_a.ahr.5);
 
-                                next.chest.orientation =
-                                    Quaternion::rotation_z(move1 * 1.7 + move2 * -4.8);
-                                next.head.orientation =
-                                    Quaternion::rotation_z(move1 * -0.7 + move2 * 1.7);
-                                next.belt.orientation =
-                                    Quaternion::rotation_z(move1 * -0.3 + move2 * 0.7);
-                                next.shorts.orientation =
-                                    Quaternion::rotation_z(move1 * -1.1 + move2 * 3.2);
+                        next.control.position = Vec3::new(
+                            s_a.ac.0 + move1 * -6.0,
+                            s_a.ac.1,
+                            s_a.ac.2 + move1 * 4.0,
+                        );
+                        next.control.orientation = Quaternion::rotation_x(s_a.ac.3)
+                            * Quaternion::rotation_y(s_a.ac.4)
+                            * Quaternion::rotation_z(s_a.ac.5 + move1 * 0.5);
 
-                                if action == d.current_action {
-                                    next.control_l.orientation.rotate_x(move1 * 1.1);
-                                    next.control_l.orientation.rotate_y(move1 * -0.8);
-                                    next.control_l.position +=
-                                        Vec3::new(0.0, 0.0, 6.0) * move1;
-                                    next.control_l.orientation.rotate_x(move2 * 0.6);
-                                    next.control_l.orientation.rotate_y(move2 * 2.0);
-                                    next.control_l.orientation.rotate_z(move2 * -1.8);
-                                }
-                            },
-                            _ => match action {
-                                0 => {
-                                    next.hand_l.position =
-                                        Vec3::new(s_a.ahl.0, s_a.ahl.1, s_a.ahl.2);
-                                    next.hand_l.orientation = Quaternion::rotation_x(s_a.ahl.3)
-                                        * Quaternion::rotation_y(s_a.ahl.4);
-                                    next.hand_r.position =
-                                        Vec3::new(s_a.ahr.0, s_a.ahr.1, s_a.ahr.2);
-                                    next.hand_r.orientation = Quaternion::rotation_x(s_a.ahr.3)
-                                        * Quaternion::rotation_z(s_a.ahr.5);
+                        next.chest.position += Vec3::new(0.0, move1 * -0.5, 0.0);
+                        next.chest.orientation =
+                            Quaternion::rotation_y(move1 * 0.1 + move2 * -0.15)
+                                * Quaternion::rotation_z(move1 * 0.9 + move2 * -1.3);
+                        next.head.orientation =
+                            Quaternion::rotation_y(move1 * 0.05 + move2 * -0.1)
+                                * Quaternion::rotation_z(move1 * -0.3 + move2 * 0.3);
+                        next.belt.orientation =
+                            Quaternion::rotation_z(move1 * -0.3 + move2 * 0.4);
+                        next.shorts.orientation =
+                            Quaternion::rotation_z(move1 * -0.5 + move2 * 0.6);
 
-                                    next.control.position = Vec3::new(
-                                        s_a.ac.0 + move1 * -6.0,
-                                        s_a.ac.1,
-                                        s_a.ac.2 + move1 * 4.0,
-                                    );
-                                    next.control.orientation = Quaternion::rotation_x(s_a.ac.3)
-                                        * Quaternion::rotation_y(s_a.ac.4)
-                                        * Quaternion::rotation_z(s_a.ac.5 + move1 * 0.5);
+                        next.chest.position += Vec3::new(0.0, move2 * 1.0, 0.0);
+                        next.control.orientation = next.control.orientation
+                            * Quaternion::rotation_z(move2 * -0.7)
+                            * Quaternion::rotation_x(move2 * 2.5);
+                        next.control.orientation.rotate_y(move2 * -0.9);
+                        next.control.position +=
+                            Vec3::new(move2 * 20.0, move2 * 6.0, move2 * -8.0);
+                    },
+                    1 => {
+                        next.chest.orientation.rotate_z(move1 * -0.4);
+                        next.head.orientation.rotate_z(move1 * 0.1);
+                        next.shorts.orientation.rotate_z(move1 * 0.1);
+                        next.control.orientation.rotate_y(move1 * 0.9);
+                        next.control.orientation.rotate_x(move1 * 1.5);
+                        next.control.orientation.rotate_z(move1 * -0.4);
+                        next.control.position +=
+                            Vec3::new(move1 * 6.0, 0.0, move1 * 7.0);
 
-                                    next.chest.position += Vec3::new(0.0, move1 * -0.5, 0.0);
-                                    next.chest.orientation =
-                                        Quaternion::rotation_y(move1 * 0.1 + move2 * -0.15)
-                                            * Quaternion::rotation_z(move1 * 0.9 + move2 * -1.3);
-                                    next.head.orientation =
-                                        Quaternion::rotation_y(move1 * 0.05 + move2 * -0.1)
-                                            * Quaternion::rotation_z(move1 * -0.3 + move2 * 0.3);
-                                    next.belt.orientation =
-                                        Quaternion::rotation_z(move1 * -0.3 + move2 * 0.4);
-                                    next.shorts.orientation =
-                                        Quaternion::rotation_z(move1 * -0.5 + move2 * 0.6);
+                        next.chest.orientation.rotate_z(move2 * 0.9);
+                        next.head.orientation.rotate_y(move2 * 0.1);
+                        next.head.orientation.rotate_z(move2 * -0.2);
+                        next.belt.orientation.rotate_z(move2 * -0.2);
+                        next.shorts.orientation.rotate_z(move2 * -0.3);
+                        next.control.orientation = next.control.orientation
+                            * Quaternion::rotation_z(move2 * 0.5)
+                            * Quaternion::rotation_x(move2 * 2.0);
+                        next.control.orientation.rotate_y(move2 * 0.7);
+                        next.control.position +=
+                            Vec3::new(move2 * -18.0, 0.0, move2 * -7.0);
+                    },
+                    2 => {
+                        next.control.orientation.rotate_z(move1 * -0.4);
+                        next.control.orientation.rotate_x(move1 * 2.0);
+                        next.control.orientation.rotate_z(move1 * -1.0);
+                        next.control.position +=
+                            Vec3::new(move1 * -4.0, 0.0, move1 * 7.0);
 
-                                    next.chest.position +=
-                                        Vec3::new(0.0, move2 * 1.0, 0.0);
-                                    next.control.orientation = next.control.orientation
-                                        * Quaternion::rotation_z(move2 * -0.7)
-                                        * Quaternion::rotation_x(move2 * 2.5);
-                                    next.control.orientation.rotate_y(move2 * -0.9);
-                                    next.control.position +=
-                                        Vec3::new(move2 * 20.0, move2 * 6.0, move2 * -8.0);
-                                },
-                                1 => {
-                                    next.chest.orientation.rotate_z(move1 * -0.4);
-                                    next.head.orientation.rotate_z(move1 * 0.1);
-                                    next.shorts.orientation.rotate_z(move1 * 0.1);
-                                    next.control.orientation.rotate_y(move1 * 0.9);
-                                    next.control.orientation.rotate_x(move1 * 1.5);
-                                    next.control.orientation.rotate_z(move1 * -0.4);
-                                    next.control.position +=
-                                        Vec3::new(move1 * 6.0, 0.0, move1 * 7.0);
-
-                                    next.chest.orientation.rotate_z(move2 * 0.9);
-                                    next.head.orientation.rotate_y(move2 * 0.1);
-                                    next.head.orientation.rotate_z(move2 * -0.2);
-                                    next.belt.orientation.rotate_z(move2 * -0.2);
-                                    next.shorts.orientation.rotate_z(move2 * -0.3);
-                                    next.control.orientation = next.control.orientation
-                                        * Quaternion::rotation_z(move2 * 0.5)
-                                        * Quaternion::rotation_x(move2 * 2.0);
-                                    next.control.orientation.rotate_y(move2 * 0.7);
-                                    next.control.position +=
-                                        Vec3::new(move2 * -18.0, 0.0, move2 * -7.0);
-                                },
-                                2 => {
-                                    next.control.orientation.rotate_z(move1 * -0.4);
-                                    next.control.orientation.rotate_x(move1 * 2.0);
-                                    next.control.orientation.rotate_z(move1 * -1.0);
-                                    next.control.position +=
-                                        Vec3::new(move1 * -4.0, 0.0, move1 * 7.0);
-
-                                    next.chest.orientation.rotate_z(move2 * -0.3);
-                                    next.head.orientation.rotate_z(move2 * 0.1);
-                                    next.shorts.orientation.rotate_z(move2 * 0.1);
-                                    next.control.orientation.rotate_x(move2 * -2.5);
-                                    next.control.orientation.rotate_z(move2 * -0.5);
-                                    next.control.position +=
-                                        Vec3::new(move2 * 8.0, 0.0, move2 * -7.0);
-                                },
-                                _ => {},
-                            },
-                        }
-                    }
+                        next.chest.orientation.rotate_z(move2 * -0.3);
+                        next.head.orientation.rotate_z(move2 * 0.1);
+                        next.shorts.orientation.rotate_z(move2 * 0.1);
+                        next.control.orientation.rotate_x(move2 * -2.5);
+                        next.control.orientation.rotate_z(move2 * -0.5);
+                        next.control.position +=
+                            Vec3::new(move2 * 8.0, 0.0, move2 * -7.0);
+                    },
+                    _ => {},
                 },
                 Some("common.abilities.axe.brutal_swing") => {
                     next.hand_l.position = Vec3::new(s_a.ahl.0, s_a.ahl.1, s_a.ahl.2);
