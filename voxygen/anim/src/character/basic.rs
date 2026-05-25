@@ -2531,13 +2531,13 @@ impl Animation for BasicAction {
                         dual_wield_start(&mut next);
 
                         next.chest.orientation =
-                            Quaternion::rotation_z(move1 * 1.7 + move2 * -4.8);
+                            Quaternion::rotation_z(move1 * 1.2 + move2 * -2.2);
                         next.head.orientation =
-                            Quaternion::rotation_z(move1 * -0.7 + move2 * 1.7);
+                            Quaternion::rotation_z(move1 * -0.5 + move2 * 0.8);
                         next.belt.orientation =
-                            Quaternion::rotation_z(move1 * -0.3 + move2 * 0.7);
+                            Quaternion::rotation_z(move1 * -0.3 + move2 * 0.6);
                         next.shorts.orientation =
-                            Quaternion::rotation_z(move1 * -1.1 + move2 * 3.2);
+                            Quaternion::rotation_z(move1 * -0.8 + move2 * 1.5);
 
                         next.control_l.orientation.rotate_x(move1 * 1.1);
                         next.control_l.orientation.rotate_y(move1 * -0.8);
