@@ -3379,13 +3379,13 @@ impl Animation for MultiAction {
                                 }
 
                                 next.chest.orientation =
-                                    Quaternion::rotation_z(move1 * 1.2 + move2 * -2.2);
+                                    Quaternion::rotation_z(move1 * 1.7 + move2 * -4.8);
                                 next.head.orientation =
-                                    Quaternion::rotation_z(move1 * -0.5 + move2 * 0.8);
+                                    Quaternion::rotation_z(move1 * -0.7 + move2 * 1.7);
                                 next.belt.orientation =
-                                    Quaternion::rotation_z(move1 * -0.3 + move2 * 0.6);
+                                    Quaternion::rotation_z(move1 * -0.3 + move2 * 0.7);
                                 next.shorts.orientation =
-                                    Quaternion::rotation_z(move1 * -0.8 + move2 * 1.5);
+                                    Quaternion::rotation_z(move1 * -1.1 + move2 * 3.2);
 
                                 if action == d.current_action {
                                     next.control_l.orientation.rotate_x(move1 * 1.1);
@@ -3782,13 +3782,13 @@ impl Animation for MultiAction {
                     }
 
                     next.chest.orientation =
-                        Quaternion::rotation_z(move1 * 1.2 * dir + move2 * -2.2 * dir);
+                        Quaternion::rotation_z(move1 * 1.7 * dir + move2 * -4.8 * dir);
                     next.head.orientation =
-                        Quaternion::rotation_z(move1 * -0.5 * dir + move2 * 0.8 * dir);
+                        Quaternion::rotation_z(move1 * -0.7 * dir + move2 * 1.7 * dir);
                     next.belt.orientation =
-                        Quaternion::rotation_z(move1 * -0.3 * dir + move2 * 0.6 * dir);
+                        Quaternion::rotation_z(move1 * -0.3 * dir + move2 * 0.7 * dir);
                     next.shorts.orientation =
-                        Quaternion::rotation_z(move1 * -0.8 * dir + move2 * 1.5 * dir);
+                        Quaternion::rotation_z(move1 * -1.1 * dir + move2 * 3.2 * dir);
 
                     if action == d.current_action {
                         let al = if d.current_action % 2 == 0 { 1.0_f32 } else { 0.0_f32 };
