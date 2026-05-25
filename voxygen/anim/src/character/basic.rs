@@ -2766,7 +2766,7 @@ impl Animation for BasicAction {
                 let tension = (chargebase * 7.0).sin();
 
                 match d.ability_info.and_then(|ai| ai.hand) {
-                    Some(HandInfo::OffHand) => {
+                    Some(HandInfo::OffHand | HandInfo::MainHand) => {
                         dual_wield_start(&mut next);
 
                         next.control_r.orientation.rotate_x(move1 * 1.1 + move2 * 0.6);

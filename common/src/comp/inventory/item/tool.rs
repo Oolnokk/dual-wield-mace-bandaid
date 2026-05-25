@@ -431,11 +431,27 @@ impl AbilityContext {
             false
         };
         let dual_wielding = if let Some(inv) = inv {
-            let has_weapon = |slot| {
-                inv.equipped(slot)
-                    .is_some_and(|i| matches!(&*i.kind(), ItemKind::Tool(_)))
+            let is_melee = |kind: ToolKind| {
+                matches!(
+                    kind,
+                    ToolKind::Sword
+                        | ToolKind::Axe
+                        | ToolKind::Hammer
+                        | ToolKind::Dagger
+                        | ToolKind::Spear
+                )
             };
-            has_weapon(EquipSlot::ActiveMainhand) && has_weapon(EquipSlot::ActiveOffhand)
+            let melee_tool_kind = |slot| {
+                inv.equipped(slot).and_then(|i| {
+                    if let ItemKind::Tool(tool) = &*i.kind() {
+                        Some(tool.kind)
+                    } else {
+                        None
+                    }
+                })
+            };
+            melee_tool_kind(EquipSlot::ActiveMainhand).is_some_and(|m| is_melee(m))
+                && melee_tool_kind(EquipSlot::ActiveOffhand).is_some_and(|o| is_melee(o))
         } else {
             false
         };
