@@ -441,7 +441,7 @@ impl AbilityContext {
                         | ToolKind::Spear
                 )
             };
-            let melee_kind = |slot| {
+            let melee_tool_kind = |slot| {
                 inv.equipped(slot).and_then(|i| {
                     if let ItemKind::Tool(tool) = &*i.kind() {
                         Some(tool.kind)
@@ -450,8 +450,8 @@ impl AbilityContext {
                     }
                 })
             };
-            melee_kind(EquipSlot::ActiveMainhand).is_some_and(|m| is_melee(m))
-                && melee_kind(EquipSlot::ActiveOffhand).is_some_and(|o| is_melee(o))
+            melee_tool_kind(EquipSlot::ActiveMainhand).is_some_and(|m| is_melee(m))
+                && melee_tool_kind(EquipSlot::ActiveOffhand).is_some_and(|o| is_melee(o))
         } else {
             false
         };
