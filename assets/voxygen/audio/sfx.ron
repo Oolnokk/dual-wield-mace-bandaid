@@ -507,6 +507,13 @@
         threshold: 0.7,
         subtitle: "subtitle-hammer_attack",
     ),
+    Attack(ComboMelee2(Action), Hammer): (
+        files: [
+            "voxygen.audio.sfx.abilities.swing",
+        ],
+        threshold: 0.7,
+        subtitle: "subtitle-hammer_attack",
+    ),
     Attack(LeapMelee(Action), Hammer): (
         files: [
             "voxygen.audio.sfx.abilities.swing",
@@ -545,6 +552,13 @@
         ],
         threshold: 0.5,
         subtitle: "subtitle-unwield_axe",
+    ),
+    Attack(ComboMelee2(Action), Axe): (
+        files: [
+            "voxygen.audio.sfx.abilities.swing",
+        ],
+        threshold: 0.7,
+        subtitle: "subtitle-axe_attack",
     ),
     Attack(RapidMelee(Action), Axe): (
         files: [
